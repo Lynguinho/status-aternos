@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "discord.js": "^14.15.0",
-    "minecraft-server-util": "^5.4.4"
+    "playwright": "^1.43.0"
   }
 }
