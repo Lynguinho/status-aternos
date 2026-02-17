@@ -1,4 +1,13 @@
-"dependencies": {
-  "discord.js": "^14.15.0",
-  "minecraft-server-util": "^5.4.4"
+{
+  "name": "status-aternos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.0",
+    "minecraft-server-util": "^5.4.4"
+  }
 }
