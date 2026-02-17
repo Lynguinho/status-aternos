@@ -1,8 +1,4 @@
-{
-  "name": "status-aternos",
-  "version": "1.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "discord.js": "^14.15.0"
-  }
+"dependencies": {
+  "discord.js": "^14.15.0",
+  "minecraft-server-util": "^5.4.4"
 }
