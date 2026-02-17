@@ -1,3 +1,4 @@
+// index.js
 const { Client, GatewayIntentBits } = require("discord.js");
 const net = require("net");
 
@@ -50,7 +51,7 @@ client.once("ready", async () => {
     if (channel.name !== name) {
       channel.setName(name);
     }
-  }, 30000);
+  }, 30000); // 30 segundos
 });
 
 client.login(TOKEN);
