@@ -1,6 +1,6 @@
 // index.js
 const { Client, GatewayIntentBits } = require("discord.js");
-const net = require("net");
+const { status } = require("minecraft-server-util");
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const CHANNEL_ID = process.env.CHANNEL_ID;
@@ -12,46 +12,33 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds]
 });
 
-function checkServer() {
-  return new Promise((resolve) => {
-    const socket = new net.Socket();
-    let status = "offline";
-
-    socket.setTimeout(3000);
-
-    socket.connect(SERVER_PORT, SERVER_IP, () => {
-      status = "online";
-      socket.destroy();
-    });
-
-    socket.on("timeout", () => {
-      status = "loading";
-      socket.destroy();
-    });
-
-    socket.on("error", () => {
-      status = "offline";
-    });
-
-    socket.on("close", () => resolve(status));
-  });
+async function checkServer() {
+  try {
+    await status(SERVER_IP, SERVER_PORT, { timeout: 3000 });
+    return "online";
+  } catch (err) {
+    return "offline";
+  }
 }
 
 client.once("ready", async () => {
   console.log("Bot ligado!");
 
   setInterval(async () => {
-    const channel = await client.channels.fetch(CHANNEL_ID);
-    const status = await checkServer();
+    try {
+      const channel = await client.channels.fetch(CHANNEL_ID);
+      const serverStatus = await checkServer();
 
-    let name = "🔴 Servidor OFF";
-    if (status === "online") name = "🟢 Servidor ON";
-    if (status === "loading") name = "🟡 Servidor CARREGANDO";
+      let name = "🔴 Servidor OFF";
+      if (serverStatus === "online") name = "🟢 Servidor ON";
 
-    if (channel.name !== name) {
-      channel.setName(name);
+      if (channel && channel.name !== name) {
+        await channel.setName(name);
+      }
+    } catch (err) {
+      console.error("Erro ao atualizar canal:", err.message);
     }
-  }, 30000); // 30 segundos
+  }, 30000); // 30s
 });
 
 client.login(TOKEN);
